@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Uma pergunta muito importante...</title>
+<title>Uma pergunta do coração...</title>
 
 <style>
 body {
@@ -16,9 +16,9 @@ body {
 
 h1 {
     margin-top: 120px;
-    font-size: 60px;
+    font-size: 65px;
     color: white;
-    text-shadow: 3px 3px 15px #ff0066;
+    text-shadow: 4px 4px 20px #ff0066;
 }
 
 .container {
@@ -26,10 +26,10 @@ h1 {
 }
 
 button {
-    padding: 25px 70px;
-    font-size: 35px;
+    padding: 25px 80px;
+    font-size: 40px;
     border: none;
-    border-radius: 20px;
+    border-radius: 25px;
     cursor: pointer;
     margin: 30px;
     transition: 0.3s;
@@ -49,15 +49,41 @@ button:hover {
     transform: scale(1.2);
 }
 
-.heart {
+.heart, .sparkle {
     position: absolute;
+    pointer-events: none;
+}
+
+.heart {
     font-size: 30px;
     animation: cair linear infinite;
+}
+
+.sparkle {
+    font-size: 20px;
+    animation: subir 3s linear forwards;
 }
 
 @keyframes cair {
     0% { transform: translateY(-10vh); opacity: 1; }
     100% { transform: translateY(110vh); opacity: 0; }
+}
+
+@keyframes subir {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-200px); opacity: 0; }
+}
+
+.frase {
+    font-size: 45px;
+    color: white;
+    margin-top: 30px;
+    opacity: 0;
+    animation: aparecer 2s forwards;
+}
+
+@keyframes aparecer {
+    to { opacity: 1; }
 }
 </style>
 </head>
@@ -72,37 +98,25 @@ button:hover {
 </div>
 
 <script>
-// Som tum-tum usando Web Audio API
 function tocarCoracao() {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(150, ctx.currentTime);
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-    osc.stop(ctx.currentTime + 0.15);
-
-    setTimeout(() => {
-        const osc2 = ctx.createOscillator();
-        const gain2 = ctx.createGain();
-        osc2.type = "sine";
-        osc2.frequency.setValueAtTime(120, ctx.currentTime);
-        gain2.gain.setValueAtTime(0.3, ctx.currentTime);
-        osc2.connect(gain2);
-        gain2.connect(ctx.destination);
-        osc2.start();
-        osc2.stop(ctx.currentTime + 0.2);
-    }, 200);
+    function beat(freq, time) {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        gain.gain.value = 0.3;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + time);
+    }
+    beat(150, 0.15);
+    setTimeout(() => beat(120, 0.2), 200);
 }
 
 function erro() {
-    alert("❌ Essa opção não existe 😌💖");
+    alert("❌ Essa opção não está disponível 😌💖");
 }
 
 function piscarTela() {
@@ -111,8 +125,32 @@ function piscarTela() {
         document.body.style.background =
             vezes % 2 === 0 ? "#ff0066" : "#ff99cc";
         vezes++;
-        if (vezes > 10) clearInterval(intervalo);
-    }, 150);
+        if (vezes > 12) clearInterval(intervalo);
+    }, 120);
+}
+
+function coracoes() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }, 200);
+}
+
+function brilhos() {
+    setInterval(() => {
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle";
+        sparkle.innerHTML = "✨";
+        sparkle.style.left = Math.random() * 100 + "vw";
+        sparkle.style.top = Math.random() * 100 + "vh";
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 3000);
+    }, 300);
 }
 
 function aceitou() {
@@ -121,26 +159,36 @@ function aceitou() {
 
     setTimeout(() => {
         document.body.innerHTML = `
-            <div style="margin-top:200px;">
-                <h1 style="font-size:70px;color:white;">
+            <div style="margin-top:150px;">
+                <h1 style="font-size:75px;color:white;">
                     Eu vou te fazer feliz eternamente 💖✨
                 </h1>
+                <div id="mensagens"></div>
             </div>
         `;
 
-        // Corações caindo
-        setInterval(function() {
-            var heart = document.createElement("div");
-            heart.classList.add("heart");
-            heart.innerHTML = "💖";
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
-            document.body.appendChild(heart);
+        const frases = [
+            "Eu te amo ❤️",
+            "Vamos construir uma família juntos 👨‍👩‍👧‍👦",
+            "Uma vida incrível nos espera ✨",
+            "Para sempre nós dois 💍"
+        ];
 
-            setTimeout(function() {
-                heart.remove();
-            }, 5000);
-        }, 200);
+        let i = 0;
+        const intervaloFrases = setInterval(() => {
+            if (i >= frases.length) {
+                clearInterval(intervaloFrases);
+                return;
+            }
+            const p = document.createElement("div");
+            p.className = "frase";
+            p.innerHTML = frases[i];
+            document.getElementById("mensagens").appendChild(p);
+            i++;
+        }, 2000);
+
+        coracoes();
+        brilhos();
 
     }, 1200);
 }
