@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Uma pergunta especial...</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(to bottom, #ff99cc, #ffd6eb);
+    overflow: hidden;
+}
+
+h1 {
+    margin-top: 120px;
+    font-size: 50px;
+    color: white;
+    text-shadow: 2px 2px 10px #ff4da6;
+}
+
+.container {
+    margin-top: 80px;
+}
+
+button {
+    padding: 20px 50px;
+    font-size: 25px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 20px;
+    transition: 0.3s;
+}
+
+#sim {
+    background-color: #ff4da6;
+    color: white;
+}
+
+#nao {
+    background-color: #666;
+    color: white;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+.heart {
+    position: absolute;
+    font-size: 25px;
+    animation: cair linear infinite;
+}
+
+@keyframes cair {
+    0% { transform: translateY(-10vh); opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Fique comigo para sempre? 💍💖</h1>
+
+<div class="container">
+    <button id="sim" onclick="aceitou()">SIM 💘</button>
+    <button id="nao" onclick="erro()">NÃO 😢</button>
+</div>
+
+<script>
+function erro() {
+    alert("❌ Erro inesperado!\n\nEssa opção não está disponível 😌💖");
+}
+
+function aceitou() {
+    document.body.innerHTML = `
+        <div style="margin-top:200px;">
+            <h1 style="font-size:55px;color:white;">
+                Eu vou te fazer feliz eternamente 💖✨
+            </h1>
+        </div>
+    `;
+
+    // Corações caindo
+    setInterval(function() {
+        var heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(function() {
+            heart.remove();
+        }, 5000);
+    }, 200);
+}
+</script>
+
+</body>
+</html>
