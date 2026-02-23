@@ -49,19 +49,24 @@ button:hover {
     transform: scale(1.2);
 }
 
-.heart, .sparkle {
+.heart, .sparkle, .cat {
     position: absolute;
     pointer-events: none;
 }
 
 .heart {
-    font-size: 30px;
+    font-size: 28px;
     animation: cair linear infinite;
 }
 
 .sparkle {
     font-size: 20px;
     animation: subir 3s linear forwards;
+}
+
+.cat {
+    font-size: 50px;
+    animation: aparecerGato 4s ease forwards;
 }
 
 @keyframes cair {
@@ -74,16 +79,22 @@ button:hover {
     100% { transform: translateY(-200px); opacity: 0; }
 }
 
-.frase {
-    font-size: 45px;
-    color: white;
-    margin-top: 30px;
-    opacity: 0;
-    animation: aparecer 2s forwards;
+@keyframes aparecer {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-@keyframes aparecer {
-    to { opacity: 1; }
+@keyframes aparecerGato {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+.frase {
+    font-size: 40px;
+    color: white;
+    margin-top: 20px;
+    animation: aparecer 0.8s ease forwards;
 }
 </style>
 </head>
@@ -125,20 +136,20 @@ function piscarTela() {
         document.body.style.background =
             vezes % 2 === 0 ? "#ff0066" : "#ff99cc";
         vezes++;
-        if (vezes > 12) clearInterval(intervalo);
-    }, 120);
+        if (vezes > 14) clearInterval(intervalo);
+    }, 100);
 }
 
-function coracoes() {
+function muitosCoracoes() {
     setInterval(() => {
         const heart = document.createElement("div");
         heart.className = "heart";
         heart.innerHTML = "💖";
         heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        heart.style.animationDuration = (Math.random() * 2 + 1) + "s";
         document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 5000);
-    }, 200);
+        setTimeout(() => heart.remove(), 3000);
+    }, 100);
 }
 
 function brilhos() {
@@ -150,7 +161,19 @@ function brilhos() {
         sparkle.style.top = Math.random() * 100 + "vh";
         document.body.appendChild(sparkle);
         setTimeout(() => sparkle.remove(), 3000);
-    }, 300);
+    }, 200);
+}
+
+function gatinhos() {
+    setInterval(() => {
+        const cat = document.createElement("div");
+        cat.className = "cat";
+        cat.innerHTML = "🐱💋🐱";
+        cat.style.left = Math.random() * 80 + "vw";
+        cat.style.top = Math.random() * 70 + "vh";
+        document.body.appendChild(cat);
+        setTimeout(() => cat.remove(), 4000);
+    }, 3000);
 }
 
 function aceitou() {
@@ -159,7 +182,7 @@ function aceitou() {
 
     setTimeout(() => {
         document.body.innerHTML = `
-            <div style="margin-top:150px;">
+            <div style="margin-top:120px;">
                 <h1 style="font-size:75px;color:white;">
                     Eu vou te fazer feliz eternamente 💖✨
                 </h1>
@@ -171,7 +194,8 @@ function aceitou() {
             "Eu te amo ❤️",
             "Vamos construir uma família juntos 👨‍👩‍👧‍👦",
             "Uma vida incrível nos espera ✨",
-            "Para sempre nós dois 💍"
+            "Para sempre nós dois 💍",
+            "Você é meu destino 💞"
         ];
 
         let i = 0;
@@ -185,10 +209,11 @@ function aceitou() {
             p.innerHTML = frases[i];
             document.getElementById("mensagens").appendChild(p);
             i++;
-        }, 2000);
+        }, 900); // mais rápido
 
-        coracoes();
+        muitosCoracoes();
         brilhos();
+        gatinhos();
 
     }, 1200);
 }
